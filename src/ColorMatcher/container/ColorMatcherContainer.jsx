@@ -10,7 +10,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
 import xkcdData from '../../data/xkcd.json';
@@ -45,89 +44,70 @@ const columns = [
   }
 ];
 
-function createData() {
-  const tableRows = xkcdData.colors.map((color) => {
-    return {
-      color: color.hex,
-      name: color.color,
-      rgb: ColorConverter.hex.rgb(color.hex).toString(),
-      hex: color.hex,
-      cymk: ColorConverter.hex.cmyk(color.hex).toString(),
-      distance: color.distance
-    };
-  });
-
-  return tableRows;
-}
-
-const rows = createData();
-
 const useStyles = makeStyles({
   root: {
     width: '100%'
-  },
-  container: {
-    maxHeight: '80vh'
   }
 });
 
 export default function ColorMatcherContainer() {
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(1000);
   const [searchField, setSearchField] = React.useState('');
   const [colorsData, setColorsData] = React.useState(xkcdData);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  const [rows, setRows] = React.useState([]);
 
   const handleChange = (event) => {
     setSearchField(event.target.value);
   };
 
   const handleSearch = () => {
-    console.log(searchField);
-    // find top 50 colors here
-
     // for each xkcd color, get a ED score with search field
     xkcdData.colors.map((color) => {
-      color.distance = calculateEuclideanDistance(searchField, color.hex);
+      color.distance = calculateEuclideanDistanceBetweenRGB(searchField, color.hex);
+
       return {
         color
       };
     });
 
-    console.log(xkcdData.colors.sort(({ distance: a }, { distance: b }) => a - b));
+    setColorsData(xkcdData);
 
-    setColorsData(xkcdData.colors.sort(({ distance: a }, { distance: b }) => a - b));
-    // const distance = calculateEuclideanDistance(searchField, xkcdData.colors[0].hex);
-
-    // console.log(distance);
-
-    // map through each xkcd colors, add a ED score
-
-    // give top 50 ED score xkcd colors
-    // pass those to table to display
+    createData();
   };
 
-  function calculateEuclideanDistance(searchHex, xkcdHex) {
-    const searchRGB = ColorConverter.hex.rgb(searchHex);
-    const xkcdRGB = ColorConverter.hex.rgb(xkcdHex);
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && searchField !== null && searchField !== '') {
+      console.log(searchField);
 
-    console.log(searchRGB);
-    console.log(xkcdRGB);
+      handleSearch();
+    }
+  };
 
-    return Math.sqrt(
-      (searchRGB[0] - xkcdRGB[0]) ^
-        (2 + (searchRGB[0] - xkcdRGB[0])) ^
-        (2 + (searchRGB[0] - xkcdRGB[0])) ^
-        2
+  function createData() {
+    colorsData.colors.sort(({ distance: a }, { distance: b }) => a - b);
+
+    setRows(
+      colorsData.colors.slice(0, 51).map((color) => {
+        return {
+          color: color.hex,
+          name: color.color,
+          rgb: ColorConverter.hex.rgb(color.hex).toString(),
+          hex: color.hex,
+          cymk: ColorConverter.hex.cmyk(color.hex).toString(),
+          distance: color.distance
+        };
+      })
+    );
+  }
+
+  function calculateEuclideanDistanceBetweenRGB(searchHex, xkcdHex) {
+    const searchRGB = ColorConverter.hex.rgb(xkcdHex);
+    const xkcdRGB = ColorConverter.hex.rgb(searchHex);
+
+    return (
+      Math.pow(searchRGB[0] - xkcdRGB[0], 2) +
+      Math.pow(searchRGB[1] - xkcdRGB[1], 2) +
+      Math.pow(searchRGB[2] - xkcdRGB[2], 2)
     );
   }
 
@@ -137,11 +117,13 @@ export default function ColorMatcherContainer() {
       <TextField
         value={searchField}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         label="Enter HEX color to search"
         id="filled-start-adornment"
         InputProps={{
           startAdornment: <InputAdornment position="start">#</InputAdornment>
         }}
+        inputProps={{ maxLength: 6 }}
         variant="outlined"
       />
       <Button onClick={handleSearch} variant="contained" color="primary">
@@ -166,39 +148,28 @@ export default function ColorMatcherContainer() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.hex}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
+            {rows.map((row) => {
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.hex}>
+                  {columns.map((column) => {
+                    const value = row[column.id];
 
-                      return (
-                        <TableCell key={column.id}>
-                          {column.id === 'color' ? (
-                            <div style={{ background: value }}>&nbsp;</div>
-                          ) : (
-                            value
-                          )}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+                    return (
+                      <TableCell key={column.id}>
+                        {column.id === 'color' ? (
+                          <div style={{ background: value }}>&nbsp;</div>
+                        ) : (
+                          value
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
     </Paper>
   );
 }
