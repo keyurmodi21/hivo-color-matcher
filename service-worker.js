@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/hivo-color-matcher/precache-manifest.c43928b8ace0e87a7fdbe4c6f8a64f5e.js"
+  "/hivo-color-matcher/precache-manifest.aa70036ce00e37eb03689c71f598ce4a.js"
 );
 
 self.addEventListener('message', (event) => {

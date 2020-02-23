@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b46c8ec46524204747a66b6dc3493019",
+    "revision": "b70a978795659215f8ff37c095e4ddb4",
     "url": "/hivo-color-matcher/index.html"
   },
   {
