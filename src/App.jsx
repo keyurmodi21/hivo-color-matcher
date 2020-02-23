@@ -8,9 +8,9 @@ import { ColorMatcherContainer } from './ColorMatcher';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#ffb74d'
+      main: '#0a2832',
     }
-  }
+  },
 });
 
 function App() {

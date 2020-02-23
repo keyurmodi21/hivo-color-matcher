@@ -7,7 +7,9 @@ const NavBar = () => {
   return (
     <div>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar
+          style={{ background: 'linear-gradient(45deg,#0065b5,#2947ff 40%,#09437f)' }}
+        >
           <Typography variant="subtitle1" color="inherit">
             Color Matcher
           </Typography>

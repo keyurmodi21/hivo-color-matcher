@@ -8,7 +8,7 @@ import { Paper } from '@material-ui/core';
 const useStyles = makeStyles({
   root: {
     width: '90%',
-    margin: '0 auto'
+    margin: '0 auto',
   }
 });
 
@@ -16,7 +16,7 @@ export default function ColorMatcher(props) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root}>
+    <Paper className={classes.root} elevation={0}>
       <ColorMatcherActionToolbar {...props} />
       <ColorMatcherList {...props} />
     </Paper>

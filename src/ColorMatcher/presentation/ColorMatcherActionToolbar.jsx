@@ -9,11 +9,16 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
-    margin: '20px 0'
+    margin: '40px 0 25px',
+    boxShadow: 'none'
   },
   textField: {
     width: '50%',
     marginRight: '20px'
+  },
+  button: {
+    padding: '15px 40px',
+    color: '#faff00'
   }
 });
 export default function ColorMatcherActionToolbar(props) {
@@ -34,7 +39,7 @@ export default function ColorMatcherActionToolbar(props) {
         value={searchField}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        label="Enter HEX color to search"
+        label="Type HEX color code and press ENTER to search"
         id="filled-start-adornment"
         InputProps={{
           startAdornment: <InputAdornment position="start">#</InputAdornment>
@@ -46,7 +51,13 @@ export default function ColorMatcherActionToolbar(props) {
         helperText={errorHelperText}
         className={classes.textField}
       />
-      <Button onClick={handleSearch} variant="contained" color="primary" size="large">
+      <Button
+        onClick={handleSearch}
+        variant="contained"
+        color="primary"
+        size="large"
+        className={classes.button}
+      >
         Search
       </Button>
     </Paper>

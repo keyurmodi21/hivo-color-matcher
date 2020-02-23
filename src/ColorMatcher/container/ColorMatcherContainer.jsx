@@ -49,18 +49,15 @@ export default function ColorMatcherContainer() {
     } else {
       setHexError(true);
 
-      setErrorHelperText('Invalid Hex entered');
+      setErrorHelperText(
+        'Invalid Hex code, please enter valid input: A 6 character hex alphanumeric value'
+      );
     }
   };
 
   const handleKeyDown = (event) => {
     // only allow when search field is not empty, search field is not blank and contains exact 6 characters
-    if (
-      event.key === 'Enter' &&
-      searchField !== null &&
-      searchField !== '' &&
-      searchField.length === 6
-    ) {
+    if (event.key === 'Enter' && searchField !== null && searchField !== '') {
       handleSearch();
     }
   };
@@ -69,7 +66,7 @@ export default function ColorMatcherContainer() {
     colorsData.colors.sort(({ distance: a }, { distance: b }) => a - b);
 
     setRows(
-      colorsData.colors.slice(0, 51).map((color) => {
+      colorsData.colors.slice(0, 50).map((color) => {
         return {
           color: color.hex,
           name: color.color,
