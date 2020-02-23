@@ -20,6 +20,13 @@ export default function ColorMatcherContainer() {
   const [hexError, setHexError] = React.useState(false);
   const [errorHelperText, setErrorHelperText] = React.useState('');
 
+  const funnnyErrorMessages = [
+    'Nope, try again with valid hex code',
+    'Invalid Hex code, please enter valid input: 6 character hex alphanumeric value',
+    'Please give me valid hex code ;)',
+    'You can try with this hex code: ff00ff'
+  ];
+
   const handleChange = (event) => {
     setSearchField(event.target.value);
   };
@@ -29,7 +36,12 @@ export default function ColorMatcherContainer() {
     const hexRegEx = new RegExp(/^[0-9A-F]{6}$/i);
 
     // check if the entered value is correct CSS color or not
-    if (hexRegEx.test(searchField)) {
+    if (searchField === null || searchField === '') {
+      setHexError(true);
+
+      setErrorHelperText('Please enter a hex value');
+      setRows([]);
+    } else if (hexRegEx.test(searchField)) {
       // for each xkcd color, get a ED score with search field
       xkcdData.colors.map((color) => {
         color.distance = calculateEuclideanDistanceBetweenRGB(
@@ -44,20 +56,21 @@ export default function ColorMatcherContainer() {
 
       setColorsData(xkcdData);
       createTableData();
+
       setHexError(false);
       setErrorHelperText('');
     } else {
       setHexError(true);
 
-      setErrorHelperText(
-        'Invalid Hex code, please enter valid input: A 6 character hex alphanumeric value'
-      );
+      const randomNumber = Math.floor(Math.random() * funnnyErrorMessages.length);
+      setErrorHelperText(funnnyErrorMessages[randomNumber]);
+      setRows([]);
     }
   };
 
   const handleKeyDown = (event) => {
     // only allow when search field is not empty, search field is not blank and contains exact 6 characters
-    if (event.key === 'Enter' && searchField !== null && searchField !== '') {
+    if (event.key === 'Enter') {
       handleSearch();
     }
   };

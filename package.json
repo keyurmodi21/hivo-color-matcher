@@ -1,7 +1,7 @@
 {
-  "name": "hivo-color-matcher",
+  "name": "color-matcher",
   "version": "0.1.0",
-  "homepage": "https://keyurmodi21.github.io/hivo-color-matcher",
+  "homepage": "http://keyurmodi21.github.io/hivo-color-matcher",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.3",
