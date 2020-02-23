@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/color-matcher/static/css/main.a5df429f.chunk.css",
-    "main.js": "/color-matcher/static/js/main.282f0bbe.chunk.js",
-    "main.js.map": "/color-matcher/static/js/main.282f0bbe.chunk.js.map",
-    "runtime-main.js": "/color-matcher/static/js/runtime-main.b7b48aa2.js",
-    "runtime-main.js.map": "/color-matcher/static/js/runtime-main.b7b48aa2.js.map",
-    "static/js/2.06eae045.chunk.js": "/color-matcher/static/js/2.06eae045.chunk.js",
-    "static/js/2.06eae045.chunk.js.map": "/color-matcher/static/js/2.06eae045.chunk.js.map",
-    "index.html": "/color-matcher/index.html",
-    "precache-manifest.45ea704ceb29d84de26bf34a2e86a85c.js": "/color-matcher/precache-manifest.45ea704ceb29d84de26bf34a2e86a85c.js",
-    "service-worker.js": "/color-matcher/service-worker.js",
-    "static/css/main.a5df429f.chunk.css.map": "/color-matcher/static/css/main.a5df429f.chunk.css.map",
-    "static/js/2.06eae045.chunk.js.LICENSE.txt": "/color-matcher/static/js/2.06eae045.chunk.js.LICENSE.txt"
+    "main.css": "/hivo-color-matcher/static/css/main.a5df429f.chunk.css",
+    "main.js": "/hivo-color-matcher/static/js/main.bf5e84ec.chunk.js",
+    "main.js.map": "/hivo-color-matcher/static/js/main.bf5e84ec.chunk.js.map",
+    "runtime-main.js": "/hivo-color-matcher/static/js/runtime-main.5bde930c.js",
+    "runtime-main.js.map": "/hivo-color-matcher/static/js/runtime-main.5bde930c.js.map",
+    "static/js/2.06eae045.chunk.js": "/hivo-color-matcher/static/js/2.06eae045.chunk.js",
+    "static/js/2.06eae045.chunk.js.map": "/hivo-color-matcher/static/js/2.06eae045.chunk.js.map",
+    "index.html": "/hivo-color-matcher/index.html",
+    "precache-manifest.55994c9a1675a77de1185466a792a165.js": "/hivo-color-matcher/precache-manifest.55994c9a1675a77de1185466a792a165.js",
+    "service-worker.js": "/hivo-color-matcher/service-worker.js",
+    "static/css/main.a5df429f.chunk.css.map": "/hivo-color-matcher/static/css/main.a5df429f.chunk.css.map",
+    "static/js/2.06eae045.chunk.js.LICENSE.txt": "/hivo-color-matcher/static/js/2.06eae045.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.b7b48aa2.js",
+    "static/js/runtime-main.5bde930c.js",
     "static/js/2.06eae045.chunk.js",
     "static/css/main.a5df429f.chunk.css",
-    "static/js/main.282f0bbe.chunk.js"
+    "static/js/main.bf5e84ec.chunk.js"
   ]
 }
