@@ -1,89 +1,71 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-
 import xkcdData from '../../data/xkcd.json';
 import ColorConverter from 'color-convert';
 
+import ColorMatcher from '../presentation/ColorMatcher';
+
 const columns = [
-  { id: 'color', label: 'Color', minWidth: 170 },
-  { id: 'name', label: 'Name', minWidth: 100 },
-  {
-    id: 'hex',
-    label: 'HEX',
-    minWidth: 170,
-    align: 'left'
-  },
-  {
-    id: 'rgb',
-    label: 'RGB',
-    minWidth: 170,
-    align: 'left'
-  },
-  {
-    id: 'cymk',
-    label: 'CYMK',
-    minWidth: 170,
-    align: 'left'
-  },
-  {
-    id: 'distance',
-    label: 'Distance',
-    minWidth: 100,
-    align: 'left'
-  }
+  { id: 'color', label: 'Color' },
+  { id: 'name', label: 'Name' },
+  { id: 'hex', label: 'HEX', format: (value) => value.toUpperCase() },
+  { id: 'rgb', label: 'RGB' },
+  { id: 'cymk', label: 'CYMK' }
 ];
 
-const useStyles = makeStyles({
-  root: {
-    width: '100%'
-  }
-});
-
 export default function ColorMatcherContainer() {
-  const classes = useStyles();
   const [searchField, setSearchField] = React.useState('');
   const [colorsData, setColorsData] = React.useState(xkcdData);
   const [rows, setRows] = React.useState([]);
+  const [hexError, setHexError] = React.useState(false);
+  const [errorHelperText, setErrorHelperText] = React.useState('');
 
   const handleChange = (event) => {
     setSearchField(event.target.value);
   };
 
   const handleSearch = () => {
-    // for each xkcd color, get a ED score with search field
-    xkcdData.colors.map((color) => {
-      color.distance = calculateEuclideanDistanceBetweenRGB(searchField, color.hex);
+    // regex for hex code ( 6 digit and can contain A-F, ignoring case)
+    const hexRegEx = new RegExp(/^[0-9A-F]{6}$/i);
 
-      return {
-        color
-      };
-    });
+    // check if the entered value is correct CSS color or not
+    if (hexRegEx.test(searchField)) {
+      // for each xkcd color, get a ED score with search field
+      xkcdData.colors.map((color) => {
+        color.distance = calculateEuclideanDistanceBetweenRGB(
+          searchField,
+          color.hex
+        );
 
-    setColorsData(xkcdData);
+        return {
+          color
+        };
+      });
 
-    createData();
+      setColorsData(xkcdData);
+      createTableData();
+      setHexError(false);
+      setErrorHelperText('');
+    } else {
+      setHexError(true);
+
+      setErrorHelperText('Invalid Hex entered');
+    }
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && searchField !== null && searchField !== '') {
-      console.log(searchField);
-
+    // only allow when search field is not empty, search field is not blank and contains exact 6 characters
+    if (
+      event.key === 'Enter' &&
+      searchField !== null &&
+      searchField !== '' &&
+      searchField.length === 6
+    ) {
       handleSearch();
     }
   };
 
-  function createData() {
+  function createTableData() {
     colorsData.colors.sort(({ distance: a }, { distance: b }) => a - b);
 
     setRows(
@@ -112,64 +94,15 @@ export default function ColorMatcherContainer() {
   }
 
   return (
-    <Paper className={classes.root}>
-      <br />
-      <TextField
-        value={searchField}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        label="Enter HEX color to search"
-        id="filled-start-adornment"
-        InputProps={{
-          startAdornment: <InputAdornment position="start">#</InputAdornment>
-        }}
-        inputProps={{ maxLength: 6 }}
-        variant="outlined"
-      />
-      <Button onClick={handleSearch} variant="contained" color="primary">
-        Search
-      </Button>
-      <br />
-      <br />
-
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.hex}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-
-                    return (
-                      <TableCell key={column.id}>
-                        {column.id === 'color' ? (
-                          <div style={{ background: value }}>&nbsp;</div>
-                        ) : (
-                          value
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+    <ColorMatcher
+      searchField={searchField}
+      columns={columns}
+      rows={rows}
+      handleSearch={handleSearch}
+      handleChange={handleChange}
+      handleKeyDown={handleKeyDown}
+      hexError={hexError}
+      errorHelperText={errorHelperText}
+    />
   );
 }
